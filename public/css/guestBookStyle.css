@@ -1,0 +1,22 @@
+.pageHeader {
+  color: orange;
+  text-align: center;
+  border-bottom: 1px solid grey;
+  padding-bottom: 1vw;
+  font-size: 30px;
+}
+
+.container {
+  padding: 20px;
+}
+
+.commentBox {
+  border-top: 2px solid grey;
+  height: 250px;
+  margin: 10px 10px 0px 10px;
+}
+
+.commentBox th {
+  text-align: left;
+  padding: 10px 400px 0px 0px;
+}

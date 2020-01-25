@@ -14,14 +14,22 @@
           <li><a href="./Abeliophyllum.html">Abeliophyllum</a></li>
           <li><a href="./Ageratum.html"> Ageratum </a></li>
         </ul>
-        <div class="gifImage">
-          <img
-            src="../images/animated-flower-image-0021.gif"
-            alt="animated_flower"
-          />
-        </div>
-        <a href="#">Guest Book</a>
+        <img
+          src="../images/animated-flower-image-0021.gif"
+          alt="animated_flower"
+          id="gifImage"
+        />
+        <a href="./guestBook.html">Guest Book</a>
       </div>
     </div>
+    <script>
+      const gifImage = document.querySelector("#gifImage");
+      gifImage.onclick = () => {
+        gifImage.style.display = "none";
+        setTimeout(() => {
+          gifImage.style.display = "block";
+        }, 1000);
+      };
+    </script>
   </body>
 </html>
