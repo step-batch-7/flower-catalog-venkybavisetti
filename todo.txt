@@ -1,5 +1,0 @@
-=> create server home page
-
-. make sure the connections from the server is connected proper or not
-. parse the request given by the clint
-. generate home html page 

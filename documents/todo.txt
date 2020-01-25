@@ -1,0 +1,8 @@
+=> create server home page
+
+. generate home page html
+  Home Page:-
+  heading at top of the Page.
+  flower image at left.
+  links to navigate to other pages.
+  jug image which will hide on click.

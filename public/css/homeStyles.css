@@ -1,0 +1,23 @@
+.pageHeader {
+  color: orange;
+  text-align: right;
+  border-bottom: 1px solid grey;
+}
+
+/* img {
+  border: 1px solid black;
+} */
+
+.container {
+  display: flex;
+  justify-content: end;
+  margin: 10px;
+}
+
+.anchor {
+  padding-top: 20%;
+}
+
+.gifImage {
+  padding-left: 50%;
+}
