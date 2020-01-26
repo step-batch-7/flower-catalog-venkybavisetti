@@ -2,8 +2,9 @@
   <head>
     <title>flowers</title>
     <link rel="stylesheet" href="../css/homeStyles.css" />
+    <script src="../js/index.js"></script>
   </head>
-  <body>
+  <body onload="main()">
     <div class="pageHeader">
       <h3 style="margin-right: 15vw;">Flower Catalog</h3>
     </div>
@@ -11,8 +12,8 @@
       <img src="../images/freshorigins.jpg" alt="allFlowers" />
       <div class="anchor">
         <ul>
-          <li><a href="./Abeliophyllum.html">Abeliophyllum</a></li>
-          <li><a href="./Ageratum.html"> Ageratum </a></li>
+          <li><a href="Abeliophyllum.html">Abeliophyllum</a></li>
+          <li><a href="Ageratum.html"> Ageratum </a></li>
         </ul>
         <img
           src="../images/animated-flower-image-0021.gif"
@@ -22,14 +23,5 @@
         <a href="./guestBook.html">Guest Book</a>
       </div>
     </div>
-    <script>
-      const gifImage = document.querySelector("#gifImage");
-      gifImage.onclick = () => {
-        gifImage.style.display = "none";
-        setTimeout(() => {
-          gifImage.style.display = "block";
-        }, 1000);
-      };
-    </script>
   </body>
 </html>
