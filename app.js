@@ -6,8 +6,6 @@ const CONTENT_TYPES = require("./lib/mimeTypes");
 
 const STATIC_FOLDER = `${__dirname}/public`;
 
-// let visitorCount = 0;
-
 const serveStaticFile = req => {
   const path = `${STATIC_FOLDER}${req.url}`;
   const stat = fs.existsSync(path) && fs.statSync(path);
@@ -25,6 +23,35 @@ const serveStaticFile = req => {
 
 const serveHomePage = req => {
   const html = loadTemplate("index.html", {});
+  const res = new Response();
+  res.setHeader("Content-Type", CONTENT_TYPES.html);
+  res.setHeader("Content-Length", html.length);
+  res.statusCode = 200;
+  res.body = html;
+  return res;
+};
+const abeliophyllumPage = function(req) {
+  const html = loadTemplate("Abeliophyllum.html", {});
+  const res = new Response();
+  res.setHeader("Content-Type", CONTENT_TYPES.html);
+  res.setHeader("Content-Length", html.length);
+  res.statusCode = 200;
+  res.body = html;
+  return res;
+};
+
+const ageratumPage = function(req) {
+  const html = loadTemplate("Ageratum.html", {});
+  const res = new Response();
+  res.setHeader("Content-Type", CONTENT_TYPES.html);
+  res.setHeader("Content-Length", html.length);
+  res.statusCode = 200;
+  res.body = html;
+  return res;
+};
+
+const guestBookPage = function(req) {
+  const html = loadTemplate("guestBook.html", {});
   const res = new Response();
   res.setHeader("Content-Type", CONTENT_TYPES.html);
   res.setHeader("Content-Length", html.length);
@@ -60,9 +87,13 @@ const serveHomePage = req => {
 // };
 
 const findHandler = req => {
-  if (req.method === "GET" && req.url === "/") return serveHomePage;
-  // if (req.method === "GET" && req.url === "/studentRegistration")
-  // return registerStudent;
+  if (req.method === "GET" && (req.url === "/" || req.url === "/index.html"))
+    return serveHomePage;
+  if (req.method === "GET" && req.url === "/Abeliophyllum.html")
+    return abeliophyllumPage;
+  if (req.method === "GET" && req.url === "/Ageratum.html") return ageratumPage;
+  if (req.method === "GET" && req.url === "/guestBook.html")
+    return guestBookPage;
   // if (req.method === "POST" && req.url === "/studentRegistration")
   //   return registerStudentPost;
   // if (req.method === "GET" && req.url === "/visitorCount")
