@@ -9,10 +9,10 @@
       <h1>Leave a comment</h1>
       <form action="submitComment" method="POST">
         <label for="venky">Name: </label>
-        <input type="text" id="venky" />
+        <input type="text" id="venky" name="name" />
         <br />
         <label for="commentBox">Comment: </label>
-        <textarea name="" id="commentBox" cols="30" rows="4"></textarea>
+        <textarea name="comment" id="commentBox" cols="30" rows="4"></textarea>
         <br />
         <input type="submit" value="Submit" />
       </form>
@@ -24,6 +24,7 @@
           <th>NAME</th>
           <th>COMMENTS</th>
         </tr>
+        __comments__
       </table>
     </div>
   </body>

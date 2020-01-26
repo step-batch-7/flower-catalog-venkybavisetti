@@ -2,8 +2,6 @@ const fs = require("fs");
 const Response = require("./lib/response");
 const { loadTemplate } = require("./lib/viewTemplate");
 const CONTENT_TYPES = require("./lib/mimeTypes");
-// const commentsData = require("./data/comments.json");
-
 const STATIC_FOLDER = `${__dirname}/public`;
 
 const serveStaticFile = req => {
@@ -60,31 +58,46 @@ const guestBookPage = function(req) {
   return res;
 };
 
-// const serveVisitorCount = () => {
-//   const text = `${visitorCount}`;
-//   const res = new Response();
-//   res.setHeader("Content-Type", CONTENT_TYPES.txt);
-//   res.setHeader("Content-Length", text.length);
-//   res.statusCode = 200;
-//   res.body = text;
-//   return res;
-// };
+const loadComments = function() {
+  const content = fs.readFileSync("./data/comments.json", "utf8");
+  if (content) return JSON.parse(content);
+  return [];
+};
 
-// const generateStudentResponse = student => {
-//   const html = loadTemplate("student.html", student);
-//   const res = new Response();
-//   res.setHeader("Content-Type", CONTENT_TYPES.html);
-//   res.setHeader("Content-Length", html.length);
-//   res.statusCode = 200;
-//   res.body = html;
-//   return res;
-// };
-// const registerStudent = req => {
-//   return generateStudentResponse(req.query);
-// };
-// const registerStudentPost = req => {
-//   return generateStudentResponse(req.body);
-// };
+const storeComments = function(comments) {
+  const string = JSON.stringify(comments);
+  fs.writeFileSync("./data/comments.json", string, "utf8");
+};
+
+const loadHtmlOnComments = function(comments) {
+  console.log(comments);
+  const commentsTable = comments
+    .map(comment => {
+      const html = `<tr>
+    <td>${comment.date}</td>
+    <td>${comment.name}</td>
+    <td>${comment.comment}</td>
+    </tr> `;
+      return html;
+    })
+    .join("\n");
+  return { comments: commentsTable };
+};
+
+const onComment = function(req) {
+  let comments = loadComments();
+  let newComment = req.body;
+  newComment.date = new Date().toGMTString();
+  comments.push(newComment);
+  storeComments(comments);
+  const html = loadTemplate("guestBook.html", loadHtmlOnComments(comments));
+  const res = new Response();
+  res.setHeader("Content-Type", CONTENT_TYPES.html);
+  res.setHeader("Content-Length", html.length);
+  res.statusCode = 200;
+  res.body = html;
+  return res;
+};
 
 const findHandler = req => {
   if (req.method === "GET" && (req.url === "/" || req.url === "/index.html"))
@@ -94,10 +107,7 @@ const findHandler = req => {
   if (req.method === "GET" && req.url === "/Ageratum.html") return ageratumPage;
   if (req.method === "GET" && req.url === "/guestBook.html")
     return guestBookPage;
-  // if (req.method === "POST" && req.url === "/studentRegistration")
-  //   return registerStudentPost;
-  // if (req.method === "GET" && req.url === "/visitorCount")
-  //   return serveVisitorCount;
+  if (req.method === "POST" && req.url === "/submitComment") return onComment;
   if (req.method === "GET") return serveStaticFile;
   return () => new Response();
 };
