@@ -17,8 +17,7 @@ const serveStaticFile = req => {
   if (!isFileExits) return new Response();
   const content = fs.readFileSync(path);
   const res = new Response();
-  res.setHeader("Content-Type", CONTENT_TYPES[extension]);
-  res.setHeader("Content-Length", content.length);
+  res.setHeaders(content, CONTENT_TYPES[extension]);
   res.statusCode = 200;
   res.body = content;
   return res;
@@ -93,7 +92,7 @@ const handlers = {
 
 const processRequest = function(req) {
   const handlerType = handlers[req.method];
-  const handler = handlerType[req.url] || handlerType.forAll || new Response();
+  const handler = handlerType[req.url] || handlerType.forAll;
   return handler(req);
 };
 
