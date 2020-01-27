@@ -47,25 +47,39 @@ const storeComments = function(comments) {
 };
 
 const getTableRows = function(comments) {
-  console.log(comments);
   const commentsTable = comments
     .map(comment => {
       const html = `<tr>
     <td>${comment.date}</td>
     <td>${comment.name}</td>
     <td>${comment.comment}</td>
-    </tr> `;
+    </tr> \n`;
       return html;
     })
     .join("\n");
   return { comments: commentsTable };
 };
 
+const putWhiteSpaces = function(content) {
+  const space = new RegExp("\\+", "g");
+  const newLine = new RegExp("%0D%0A", "g");
+  newContent = content.replace(space, " ");
+  return newContent.replace(newLine, "</br>");
+};
+
+const getNewComment = function(feedback) {
+  const { name, comment } = feedback;
+  let newComment = {};
+  newComment.name = putWhiteSpaces(name);
+  newComment.comment = putWhiteSpaces(comment);
+  newComment.date = new Date().toGMTString();
+  return newComment;
+};
+
 const onComment = function(req) {
   let comments = loadComments();
-  let { name, comment } = req.body;
-  let date = new Date().toGMTString();
-  comments.unshift({ name, comment, date });
+  const newComment = getNewComment(req.body);
+  comments.unshift(newComment);
   storeComments(comments);
   const html = loadTemplate("guestBook.html", getTableRows(comments));
   const res = new Response();
