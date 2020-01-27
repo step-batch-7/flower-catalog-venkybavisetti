@@ -18,5 +18,14 @@
 
 .commentBox th {
   text-align: left;
-  padding: 10px 200px 0px 0px;
+  padding: 10px 390px 0px 0px;
+}
+
+.commentBox td {
+  border: 1px solid grey;
+}
+
+table {
+  border: 1px solid black;
+  margin-top: 10px;
 }
