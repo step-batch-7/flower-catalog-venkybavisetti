@@ -50,11 +50,11 @@ const storeComments = function(comments) {
 const getTableRows = function(comments) {
   const commentsTable = comments
     .map(comment => {
-      const html = `<tr>
-    <td>${comment.date}</td>
-    <td>${comment.name}</td>
-    <td>${comment.comment}</td>
-    </tr> \n`;
+      const html = `<div class= "comment">
+      <div class="name"><p><span>&#129333</span>${comment.name}</p>
+     <div class="date"><p><span style='font-size:13px;'>&#8986;</span>${comment.date}</p></div></div>
+     <p><span >&#129488</span>${comment.comment}</p>
+    </div>`;
       return html;
     })
     .join("\n");
@@ -62,10 +62,8 @@ const getTableRows = function(comments) {
 };
 
 const putWhiteSpaces = function(content) {
-  const space = new RegExp("\\+", "g");
-  const newLine = new RegExp("%0D%0A", "g");
-  newContent = content.replace(space, " ");
-  return newContent.replace(newLine, "</br>");
+  newContent = content.replace(/\+/g, " ");
+  return decodeURIComponent(newContent);
 };
 
 const getNewComment = function(feedback) {
@@ -73,7 +71,7 @@ const getNewComment = function(feedback) {
   let newComment = {};
   newComment.name = putWhiteSpaces(name);
   newComment.comment = putWhiteSpaces(comment);
-  newComment.date = moment().format("DD-MM-YYYY hh:mm:ss ");
+  newComment.date = new Date().toLocaleString();
   return newComment;
 };
 

@@ -1,9 +1,9 @@
 const main = function() {
   const gifImage = document.querySelector("#gifImage");
   gifImage.onclick = () => {
-    gifImage.style.display = "none";
+    gifImage.style.visibility = "hidden";
     setTimeout(() => {
-      gifImage.style.display = "block";
+      gifImage.style.visibility = "visible";
     }, 1000);
   };
 };
