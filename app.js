@@ -2,6 +2,7 @@ const fs = require("fs");
 const Response = require("./lib/response");
 const { loadTemplate } = require("./lib/viewTemplate");
 const CONTENT_TYPES = require("./lib/mimeTypes");
+const moment = require("moment");
 
 const getPath = function(url, extension) {
   const STATIC_FOLDER = `${__dirname}/public`;
@@ -72,7 +73,7 @@ const getNewComment = function(feedback) {
   let newComment = {};
   newComment.name = putWhiteSpaces(name);
   newComment.comment = putWhiteSpaces(comment);
-  newComment.date = new Date().toGMTString();
+  newComment.date = moment().format("DD-MM-YYYY hh:mm:ss ");
   return newComment;
 };
 
