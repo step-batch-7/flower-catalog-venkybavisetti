@@ -1,8 +1,6 @@
 const fs = require("fs");
-const Response = require("./lib/response");
 const { loadTemplate } = require("./lib/viewTemplate");
 const CONTENT_TYPES = require("./lib/mimeTypes");
-const moment = require("moment");
 
 const getPath = function(url, extension) {
   const STATIC_FOLDER = `${__dirname}/public`;
@@ -10,29 +8,27 @@ const getPath = function(url, extension) {
   return `${STATIC_FOLDER}${htmlFile}${url}`;
 };
 
-const serveStaticFile = req => {
+const notFound = function(res) {
+  res.writeHead(404);
+  res.end("Not Found");
+};
+
+const serveStaticFile = (req, res) => {
   const url = req.url === "/" ? "/index.html" : req.url;
   const [, extension] = url.match(/.*\.(.*)$/) || [];
   const path = getPath(url, extension);
   const isFileExits = fs.existsSync(path) && fs.statSync(path).isFile();
-  if (!isFileExits) return new Response();
+  if (!isFileExits) return notFound(res);
   const content = fs.readFileSync(path);
-  const res = new Response();
-  res.setHeaders(content, CONTENT_TYPES[extension]);
-  res.statusCode = 200;
-  res.body = content;
-  return res;
+  res.setHeader("Content-Type", CONTENT_TYPES[extension]);
+  res.end(content);
 };
 
-const guestBookPage = function(req) {
+const guestBookPage = function(req, res) {
   const comments = loadComments();
   const html = loadTemplate("guestBook.html", getTableRows(comments));
-  const res = new Response();
   res.setHeader("Content-Type", CONTENT_TYPES.html);
-  res.setHeader("Content-Length", html.length);
-  res.statusCode = 200;
-  res.body = html;
-  return res;
+  res.end(html);
 };
 
 const loadComments = function() {
@@ -51,8 +47,8 @@ const getTableRows = function(comments) {
   const commentsTable = comments
     .map(comment => {
       const html = `<div class= "comment">
-      <div class="name"><p><span>&#129333</span>${comment.name}</p>
-     <div class="date"><p><span style='font-size:13px;'>&#8986;</span>${comment.date}</p></div></div>
+      <div class="name"><span>&#129333</span>${comment.name}
+     <div class="date"><span style='font-size:13px;'>&#8986;</span>${comment.date}</div></div>
      <p><span >&#129488</span>${comment.comment}</p>
     </div>`;
       return html;
@@ -65,9 +61,18 @@ const putWhiteSpaces = function(content) {
   newContent = content.replace(/\+/g, " ");
   return decodeURIComponent(newContent);
 };
+const pickDetails = (query, keyValue) => {
+  const [key, value] = keyValue.split("=");
+  query[key] = value;
+  return query;
+};
 
-const getNewComment = function(feedback) {
-  const { name, comment } = feedback;
+const parseFeedback = function(keyValueTextPairs) {
+  return keyValueTextPairs.split("&").reduce(pickDetails, {});
+};
+
+const getNewComment = function(feedbackData) {
+  const { name, comment } = parseFeedback(feedbackData);
   let newComment = {};
   newComment.name = putWhiteSpaces(name);
   newComment.comment = putWhiteSpaces(comment);
@@ -75,18 +80,18 @@ const getNewComment = function(feedback) {
   return newComment;
 };
 
-const onComment = function(req) {
-  let comments = loadComments();
-  const newComment = getNewComment(req.body);
-  comments.unshift(newComment);
-  storeComments(comments);
-  const html = loadTemplate("guestBook.html", getTableRows(comments));
-  const res = new Response();
-  res.setHeader("Content-Type", CONTENT_TYPES.html);
-  res.setHeader("Content-Length", html.length);
-  res.statusCode = 200;
-  res.body = html;
-  return res;
+const onComment = function(req, res) {
+  let data = "";
+  req.on("data", chunk => (data += chunk));
+  req.on("end", () => {
+    let comments = loadComments();
+    const newComment = getNewComment(data);
+    comments.unshift(newComment);
+    storeComments(comments);
+    const html = loadTemplate("guestBook.html", getTableRows(comments));
+    res.setHeader("Content-Type", CONTENT_TYPES.html);
+    res.end(html);
+  });
 };
 
 const getHandlers = {
@@ -98,15 +103,9 @@ const postHandlers = {
   "/submitComment": onComment
 };
 
-const handlers = {
+const methods = {
   GET: getHandlers,
   POST: postHandlers
 };
 
-const processRequest = function(req) {
-  const handlerType = handlers[req.method];
-  const handler = handlerType[req.url] || handlerType.forAll;
-  return handler(req);
-};
-
-module.exports = processRequest;
+module.exports = { methods };
