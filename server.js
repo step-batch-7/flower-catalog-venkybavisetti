@@ -1,15 +1,8 @@
 const http = require("http");
-const { methods } = require("./app");
-
-const requestListener = function(req, res) {
-  console.log("Request: ", req.method, req.url);
-  const handlerType = methods[req.method];
-  const handler = handlerType[req.url] || handlerType.forAll;
-  return handler(req, res);
-};
+const { app } = require("./handlers");
 
 const main = (port = 4000) => {
-  const server = new http.Server(requestListener);
+  const server = new http.Server(app.serve.bind(app));
   server.listen(port, () => console.log(`listening to ${port} `));
 };
 
