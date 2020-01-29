@@ -88,9 +88,9 @@ const onComment = function(req, res) {
     const newComment = getNewComment(data);
     comments.unshift(newComment);
     storeComments(comments);
-    const html = loadTemplate("guestBook.html", getTableRows(comments));
-    res.setHeader("Content-Type", CONTENT_TYPES.html);
-    res.end(html);
+    res.statusCode = 301;
+    res.setHeader("Location", "/guestBook.html");
+    res.end();
   });
 };
 
