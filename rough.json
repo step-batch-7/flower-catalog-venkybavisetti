@@ -1,0 +1,46 @@
+// {
+//        "editor.tabSize": 2,
+//        "workbench.colorTheme": "Dark (Molokai)",
+//        "window.zoomLevel": 1,
+//        "workbench.iconTheme": "vscode-icons",
+//        "editor.fontLigatures": true,
+//        "editor.fontFamily": "Fira Code,Menlo, Monaco, 'Courier New', monospace",
+//        "prettier.vueIndentScriptAndStyle": true,
+//        "editor.renderWhitespace": "all",
+//        "workbench.startupEditor": "newUntitledFile",
+//        "[javascript]": {
+//            "editor.defaultFormatter": "esbenp.prettier-vscode"
+//        },
+//        "cSpell.userWords": [
+//            "bengolre"
+//        ],
+//        "editor.suggestSelection": "first",
+//        "highlight-matching-tag.styles": {
+//            "opening": {
+//                "name": {
+//                    "highlight": "blue"
+//                }
+//            },
+//            "closing": {
+//                "name": {
+//                    "highlight": "blue"
+//                }
+//            }
+//        },
+//            "files.autoSaveDelay": 100,
+//                "prettier.singleQuote": true,
+//            "files.autoSave": "onWindowChange",
+//                "[json]": {
+//                    "editor.defaultFormatter": "esbenp.prettier-vscode"
+//                },
+//                "[jsonc]": {
+//                    "editor.defaultFormatter": "esbenp.prettier-vscode"
+//                },
+//                "[html]": {
+//                    "editor.defaultFormatter": "vscode.html-language-features"
+//                },
+//                    "editor.defaultFormatter": "SimonSiefke.html-language-features",
+//                        "[css]": {
+//                            "editor.defaultFormatter": "esbenp.prettier-vscode"
+//                        },
+//    }

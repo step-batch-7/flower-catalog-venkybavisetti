@@ -3,7 +3,8 @@
     "commonjs": true,
     "es6": true,
     "node": true,
-    "mocha": true
+    "mocha": true,
+    "browser": true
   },
   "extends": "eslint:recommended",
   "globals": {
@@ -42,7 +43,6 @@
       }
     ],
     "max-statements": "error",
-    "no-console": "error",
     "no-else-return": "error",
     "no-eval": "error",
     "no-implicit-globals": "error",
@@ -69,7 +69,6 @@
     "no-param-reassign": "error",
     "space-infix-ops": "error",
     "no-multi-spaces": "error",
-    "object-curly-spacing": "error",
     "semi-spacing": "error",
     "no-multiple-empty-lines": [
       "error",
