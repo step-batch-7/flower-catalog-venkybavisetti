@@ -18,3 +18,12 @@ describe('GET nonExisting Url', () => {
       .expect(404, done);
   });
 });
+
+describe('POST /register', () => {
+  it('should post on the register url', done => {
+    request(app.serve.bind(app))
+      .post('/submitComment')
+      .send('name=Ranbir&comment=hi+venky')
+      .expect(301, done);
+  });
+});
