@@ -7,7 +7,7 @@
     "lib": "lib"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha",
     "start": "node server.js"
   },
   "repository": {
@@ -23,6 +23,7 @@
   "homepage": "https://github.com/step-batch-7/flower-catalog-venkybavisetti#readme",
   "devDependencies": {
     "eslint": "^6.8.0",
+    "sinon": "^8.1.1",
     "supertest": "^4.0.2"
   }
 }
