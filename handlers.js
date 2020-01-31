@@ -19,7 +19,7 @@ const getUrl = function(url) {
 };
 
 const areStatsNotOk = function(stat) {
-  return !stat && !stat.isFile();
+  return !stat || !stat.isFile();
 };
 
 const serveStaticFile = (req, res, next) => {
