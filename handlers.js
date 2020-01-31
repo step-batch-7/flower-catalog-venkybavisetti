@@ -106,7 +106,7 @@ const onComment = function(req, res) {
 };
 
 const methodNotAllowed = function(req, res) {
-  res.setHeader = 400;
+  res.statusCode = 400;
   res.end('Method Not Allowed');
 };
 

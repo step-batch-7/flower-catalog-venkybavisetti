@@ -11,16 +11,8 @@ describe('GET Home Page', () => {
   });
 });
 
-describe('GET nonExisting Url', () => {
-  it('should return 404 for a non existing page', done => {
-    request(app.serve.bind(app))
-      .get('/badPage')
-      .expect(404, done);
-  });
-});
-
-describe('POST /register', () => {
-  it('should post on the register url', done => {
+describe('POST /submitComment', () => {
+  it('should post on the submitComment url', done => {
     request(app.serve.bind(app))
       .post('/submitComment')
       .send('name=Ranbir&comment=hi+venky')
@@ -36,5 +28,21 @@ describe('GET guestbook Page', () => {
       .set('Accept', '*/*')
       .expect(200)
       .expect('Content-Type', 'text/html', done);
+  });
+});
+
+describe('GET method not allowed ', () => {
+  it('should return 400 for a non existing method', done => {
+    request(app.serve.bind(app))
+      .put('/')
+      .expect(400, done);
+  });
+});
+
+describe('GET nonExisting Url', () => {
+  it('should return 404 for a non existing page', done => {
+    request(app.serve.bind(app))
+      .get('/badPage')
+      .expect(404, done);
   });
 });
