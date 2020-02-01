@@ -11,8 +11,10 @@
     "start": "node server.js"
   },
   "repository": {
-    "type": "git",
-    "url": "git+https://github.com/step-batch-7/flower-catalog-venkybavisetti.git"
+    "test": "export DATA_STORE='test/resource/comments.json'; nyc mocha && npm run linterTest",
+    "start": "export DATA_STORE='data/comments.json'; node server.js",
+    "linterTest": "eslint .",
+    "watch": "export DATA_STORE='test/resource/comments.json'; mocha --watch --growl"
   },
   "keywords": [],
   "author": "",

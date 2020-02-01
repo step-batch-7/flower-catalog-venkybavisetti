@@ -2,6 +2,7 @@ const fs = require('fs');
 const { loadTemplate } = require('./lib/viewTemplate');
 const CONTENT_TYPES = require('./lib/mimeTypes');
 const { App } = require('./app');
+const { commentsPath } = require('./config');
 
 const getPath = function(url, extension) {
   const STATIC_FOLDER = `${__dirname}/public`;
@@ -45,7 +46,7 @@ const guestBookPage = function(req, res) {
 };
 
 const loadComments = function() {
-  const path = './data/comments.json';
+  const path = commentsPath;
   const stat = fs.existsSync(path) && fs.statSync(path);
   if (!stat || !stat.isFile()) {
     return [];
@@ -55,7 +56,7 @@ const loadComments = function() {
 
 const storeComments = function(comments) {
   const string = JSON.stringify(comments);
-  fs.writeFileSync('./data/comments.json', string, 'utf8');
+  fs.writeFileSync(commentsPath, string, 'utf8');
 };
 
 const getTableRows = function(comments) {
