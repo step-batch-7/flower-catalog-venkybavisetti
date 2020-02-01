@@ -11,6 +11,8 @@ const getPath = function(url, extension) {
 
 const notFound = function(req, res) {
   res.statusCode = 404;
+  res.setHeader('Content-Type', CONTENT_TYPES.txt);
+
   res.end('Not Found');
 };
 
@@ -107,6 +109,7 @@ const onComment = function(req, res) {
 
 const methodNotAllowed = function(req, res) {
   res.statusCode = 400;
+  res.setHeader('Content-Type', CONTENT_TYPES.txt);
   res.end('Method Not Allowed');
 };
 

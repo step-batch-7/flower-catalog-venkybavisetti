@@ -12,7 +12,7 @@ class App {
     this.routes.push({ handler: middleware });
   }
   serve(req, res) {
-    console.log('Request:- ', req.method, req.url);
+    // console.log('Request:- ', req.method, req.url);
     const matchingHandlers = this.routes.filter(route =>
       matchRoute(route, req)
     );

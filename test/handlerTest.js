@@ -35,6 +35,7 @@ describe('GET Home Page', () => {
       .get('/images/freshorigins.jpg')
       .set('Accept', '*/*')
       .expect(200)
+      .expect('Content-Length', '381314')
       .expect('Content-Type', 'image/jpg', done);
   });
   it('should get the path /images/animated-flower-image-0021.gif', done => {
@@ -42,7 +43,95 @@ describe('GET Home Page', () => {
       .get('/images/animated-flower-image-0021.gif')
       .set('Accept', '*/*')
       .expect(200)
+      .expect('Content-Length', '65088')
       .expect('Content-Type', 'image/gif', done);
+  });
+});
+
+describe('Abeliophyllum Page', () => {
+  it('should get the path /Abeliophyllum.html', done => {
+    request(App)
+      .get('/Abeliophyllum.html')
+      .set('Accept', '*/*')
+      .expect(200)
+      .expect('Content-Type', 'text/html')
+      .expect('Content-Length', '1547', done);
+  });
+  it('should get the path /css/Abeliophyllum.css', done => {
+    request(App)
+      .get('/css/individualFlowers.css')
+      .set('Accept', '*/*')
+      .expect(200)
+      .expect('Content-Type', 'text/css')
+      .expect('Content-Length', '248', done);
+  });
+  it('should get the path /images/Abeliophyllum.jpg', done => {
+    request(App)
+      .get('/images/pbase-Abeliophyllum.jpg')
+      .set('Accept', '*/*')
+      .expect(200)
+      .expect('Content-Type', 'image/jpg', done);
+  });
+  it('should get the path /docs/Abeliophyllum.pdf', done => {
+    request(App)
+      .get('/pdfs/Abeliophyllum.pdf')
+      .set('Accept', '*/*')
+      .expect(200)
+      .expect('Content-length', '35864')
+      .expect('Content-Type', 'application/pdf', done);
+  });
+});
+
+describe('Ageratum Page', () => {
+  it('should get the path /Ageratum.html', done => {
+    request(App)
+      .get('/Ageratum.html')
+      .set('Accept', '*/*')
+      .expect(200)
+      .expect('Content-Type', 'text/html')
+      .expect('Content-Length', '1209', done);
+  });
+  it('should get the path /css/Ageratum.css', done => {
+    request(App)
+      .get('/css/individualFlowers.css')
+      .set('Accept', '*/*')
+      .expect(200)
+      .expect('Content-Type', 'text/css')
+      .expect('Content-Length', '248', done);
+  });
+  it('should get the path /images/Ageratum.jpg', done => {
+    request(App)
+      .get('/images/pbase-ageratum.jpg')
+      .set('Accept', '*/*')
+      .expect(200)
+      .expect('Content-Type', 'image/jpg', done);
+  });
+  it('should get the path /pdfs/Ageratum.pdf', done => {
+    request(App)
+      .get('/pdfs/Ageratum.pdf')
+      .set('Accept', '*/*')
+      .expect(200)
+      .expect('Content-Type', 'application/pdf', done)
+      .expect('Content-Length', '140228');
+  });
+});
+
+describe('GuestBook Page', () => {
+  it('should get the path /GuestBook.html', done => {
+    request(App)
+      .get('/guestBook.html')
+      .set('Accept', '*/*')
+      .expect(200)
+      .expect('Content-Type', 'text/html')
+      .expect('Content-Length', '3000', done);
+  });
+  it('should get the path /css/GuestBook.css', done => {
+    request(App)
+      .get('/css/guestBookStyle.css')
+      .set('Accept', '*/*')
+      .expect(200)
+      .expect('Content-Type', 'text/css')
+      .expect('Content-Length', '507', done);
   });
 });
 
@@ -56,30 +145,38 @@ describe('POST /submitComment', () => {
       .expect(301)
       .expect('Location', '/guestBook.html', done);
   });
-});
-
-describe('GET guestbook Page', () => {
-  it('should get the guestPage page /guestBook.html path', done => {
-    request(app.serve.bind(app))
-      .get('/guestBook.html')
+  it('Should give file not found if file not exist', done => {
+    request(App)
+      .post('/badFile')
       .set('Accept', '*/*')
-      .expect(200)
-      .expect('Content-Type', 'text/html', done);
+      .send('name=raja&comment=wonderful+site')
+      .expect(404)
+      .expect('Content-Type', 'text/plain')
+      .expect('Content-Length', '9')
+      .expect('Not Found', done);
   });
 });
 
-describe('GET method not allowed ', () => {
-  it('should return 400 for a non existing method', done => {
-    request(app.serve.bind(app))
+describe('FILE NOT FOUND', () => {
+  it('Should give file not found if file not exist', done => {
+    request(App)
+      .get('/badFile')
+      .set('Accept', '*/*')
+      .expect(404)
+      .expect('Content-Type', 'text/plain')
+      .expect('Content-Length', '9')
+      .expect('Not Found', done);
+  });
+});
+
+describe('METHOD NOT ALLOWED', () => {
+  it('Should should give method not allowed for put method ', done => {
+    request(App)
       .put('/')
-      .expect(400, done);
-  });
-});
-
-describe('GET nonExisting Url', () => {
-  it('should return 404 for a non existing page', done => {
-    request(app.serve.bind(app))
-      .get('/badPage')
-      .expect(404, done);
+      .set('Accept', '*/*')
+      .expect(400)
+      .expect('Content-Type', 'text/plain')
+      .expect('Content-Length', '18')
+      .expect('Method Not Allowed', done);
   });
 });
