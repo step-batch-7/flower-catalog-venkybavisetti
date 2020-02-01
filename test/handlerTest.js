@@ -123,7 +123,7 @@ describe('GuestBook Page', () => {
       .set('Accept', '*/*')
       .expect(200)
       .expect('Content-Type', 'text/html')
-      .expect('Content-Length', '1477', done);
+      .expect('Content-Length', '1005', done);
   });
   it('should get the path /css/GuestBook.css', done => {
     request(App)
