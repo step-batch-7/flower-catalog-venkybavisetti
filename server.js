@@ -1,7 +1,7 @@
 const fs = require('fs');
 const http = require('http');
 const { app } = require('./handlers');
-const defaultPort = 4000;
+const defaultPort = process.env.PORT || 4000;
 
 const setUpDataBase = function() {
   const data = `${__dirname}/data`;
