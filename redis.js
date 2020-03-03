@@ -3,7 +3,7 @@ const client = redis.createClient(
   process.env.REDIS_URL || 'http://localhost:6379'
 );
 
-let comments = [];
+let comments;
 
 client.on('error', err => console.log('Error', err));
 
@@ -12,9 +12,7 @@ client.get('flower-catalog-comments', (err, data) => {
     console.log(err);
     return;
   }
-  if (data) {
-    comments = JSON.parse(data);
-  }
+  comments = JSON.parse(data || '[]');
 });
 
 const loadComments = () => comments;
