@@ -1,49 +1,6 @@
 const fs = require('fs');
 const { loadTemplate } = require('./lib/viewTemplate');
-const CONTENT_TYPES = require('./lib/mimeTypes');
-const { App } = require('./app');
 const { commentsPath } = require('./config');
-
-const getPath = function(url, extension) {
-  const STATIC_FOLDER = `${__dirname}/public`;
-  const htmlFile = extension === 'html' ? '/html' : '';
-  return `${STATIC_FOLDER}${htmlFile}${url}`;
-};
-
-const notFound = function(req, res) {
-  res.statusCode = 404;
-  res.setHeader('Content-Type', CONTENT_TYPES.txt);
-
-  res.end('Not Found');
-};
-
-const getUrl = function(url) {
-  return url === '/' ? '/index.html' : url;
-};
-
-const areStatsNotOk = function(stat) {
-  return !stat || !stat.isFile();
-};
-
-const serveStaticFile = (req, res, next) => {
-  const url = getUrl(req.url);
-  const [, extension] = url.match(/.*\.(.*)$/) || [];
-  const path = getPath(url, extension);
-  const stat = fs.existsSync(path) && fs.statSync(path);
-  if (areStatsNotOk(stat)) {
-    return next();
-  }
-  const content = fs.readFileSync(path);
-  res.setHeader('Content-Type', CONTENT_TYPES[extension]);
-  res.end(content);
-};
-
-const guestBookPage = function(req, res) {
-  const comments = loadComments();
-  const html = loadTemplate('guestBook.html', getTableRows(comments));
-  res.setHeader('Content-Type', CONTENT_TYPES.html);
-  res.end(html);
-};
 
 const loadComments = function() {
   const path = commentsPath;
@@ -75,65 +32,22 @@ const getTableRows = function(comments) {
   return { comments: commentsTable };
 };
 
-const putWhiteSpaces = function(content) {
-  const newContent = content.replace(/\+/g, ' ');
-  return decodeURIComponent(newContent);
-};
-const pickDetails = (query, keyValue) => {
-  const [key, value] = keyValue.split('=');
-  query[key] = value;
-  return query;
-};
-
-const parseFeedback = function(keyValueTextPairs) {
-  return keyValueTextPairs.split('&').reduce(pickDetails, {});
-};
-
-const getNewComment = function(feedbackData) {
-  const { name, comment } = parseFeedback(feedbackData);
-  const newComment = {};
-  newComment.name = putWhiteSpaces(name);
-  newComment.comment = putWhiteSpaces(comment);
-  newComment.date = new Date().toLocaleString();
-  return newComment;
+const guestBookPage = function(req, res) {
+  const comments = loadComments();
+  const html = loadTemplate('guestBook.html', getTableRows(comments));
+  res.send(html);
 };
 
 const onComment = function(req, res) {
+  const { name, comment } = req.body;
+  const date = new Date().toLocaleString();
   const comments = loadComments();
-  const newComment = getNewComment(req.body);
-  comments.unshift(newComment);
+  comments.unshift({ name, comment, date });
   storeComments(comments);
-  res.statusCode = 301;
-  res.setHeader('Location', '/guestBook.html');
-  res.end();
+  res.redirect('/guestBook.html');
 };
 
-const methodNotAllowed = function(req, res) {
-  res.statusCode = 400;
-  res.setHeader('Content-Type', CONTENT_TYPES.txt);
-  res.end('Method Not Allowed');
+module.exports = {
+  guestBookPage,
+  onComment
 };
-
-const readBody = function(req, res, next) {
-  let data = '';
-  req.on('data', chunk => {
-    data += chunk;
-  });
-  req.on('end', () => {
-    req.body = data;
-    next();
-  });
-};
-
-const app = new App();
-
-app.use(readBody);
-
-app.get('/guestBook.html', guestBookPage);
-app.get('', serveStaticFile);
-app.get('', notFound);
-app.post('/submitComment', onComment);
-app.post('', notFound);
-app.use(methodNotAllowed);
-
-module.exports = { app };
