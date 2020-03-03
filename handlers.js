@@ -1,20 +1,5 @@
-const fs = require('fs');
 const { loadTemplate } = require('./lib/viewTemplate');
-const { commentsPath } = require('./config');
-
-const loadComments = function() {
-  const path = commentsPath;
-  const stat = fs.existsSync(path) && fs.statSync(path);
-  if (!stat || !stat.isFile()) {
-    return [];
-  }
-  return JSON.parse(fs.readFileSync(path, 'utf8'));
-};
-
-const storeComments = function(comments) {
-  const string = JSON.stringify(comments);
-  fs.writeFileSync(commentsPath, string, 'utf8');
-};
+const { loadComments, storeComments } = require('./redis');
 
 const getTableRows = function(comments) {
   const commentsTable = comments
